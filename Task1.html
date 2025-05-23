@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Development Basics - ApexPlanet</title>
+    <style>
+        /* CSS Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8f4;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #3cb371, #1e847f);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: #2e856e;
+            border-bottom: 3px solid #3cb371;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: #2e856e;
+            margin-top: 25px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3cb371;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background-color: #2e856e;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(46, 133, 110, 0.3);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .image-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+
+        .feature-box {
+            flex-basis: 30%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 16px rgba(0,0,0,0.1);
+        }
+
+        .feature-box h3 {
+            color: #3cb371;
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* Link Styling */
+        a {
+            color: #2e856e;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 1px dotted #3cb371;
+        }
+
+        a:hover {
+            color: #3cb371;
+            border-bottom: 1px solid #3cb371;
+        }
+
+        .links-section {
+            background-color: #e8f5f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .links-section ul {
+            padding-left: 20px;
+        }
+
+        .links-section li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        /* Navigation Menu */
+        nav {
+            background-color: #2c3e50;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            border-bottom: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #3cb371;
+            border-bottom: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features {
+                flex-direction: column;
+            }
+            
+            .feature-box {
+                flex-basis: 100%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Welcome to Web Development Fundamentals</h1>
+            <p>Learn HTML, CSS, and JavaScript with ApexPlanet</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#technologies">Technologies</a></li>
+            <li><a href="#interactive">Interactive Demo</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="about">
+            <h2>About This Project</h2>
+            <p>This webpage demonstrates the foundational elements of web development, combining HTML structure, CSS styling, and JavaScript interactivity. This project is part of the internship program at <a href="https://www.apexplanet.com" target="_blank">ApexPlanet Software Pvt Ltd</a>.</p>
+            
+            <div class="image-container">
+                <img src="https://as2.ftcdn.net/v2/jpg/02/83/46/33/1000_F_283463385_mfnrx6RPU3BqObhVuVjYZjeZ5pegE7xq.jpg" alt="Web Development Illustration">
+            </div>
+            
+            <div class="links-section">
+                <h3>Useful Web Development Resources</h3>
+                <ul>
+                    <li><a href="https://www.w3schools.com/html/" target="_blank">HTML Tutorial</a> - Learn HTML basics</li>
+                    <li><a href="https://www.w3schools.com/css/" target="_blank">CSS Tutorial</a> - Master CSS styling</li>
+                    <li><a href="https://www.w3schools.com/js/" target="_blank">JavaScript Tutorial</a> - Explore JavaScript programming</li>
+                    <li><a href="https://developer.mozilla.org/en-US/" target="_blank">MDN Web Docs</a> - Comprehensive web development documentation</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="technologies">
+            <h2>Core Web Technologies</h2>
+            
+            <div class="features">
+                <div class="feature-box">
+                    <h3>HTML</h3>
+                    <p>HTML provides the structure for web pages. It uses elements and tags to define content like headings, paragraphs, images, and links.</p>
+                    <a href="https://html.spec.whatwg.org/" target="_blank">HTML Specification</a>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>CSS</h3>
+                    <p>CSS controls the visual appearance of web pages. It handles colors, fonts, spacing, layout, and responsive design.</p>
+                    <a href="https://www.w3.org/Style/CSS/" target="_blank">CSS Working Group</a>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>JavaScript</h3>
+                    <p>JavaScript adds interactivity to websites. It enables dynamic content updates, user interaction, and advanced functionality.</p>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">JavaScript Documentation</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive">
+            <h2>Interactive Elements</h2>
+            <p>Click the buttons below to see JavaScript in action:</p>
+            
+            <button id="alertBtn" class="btn">Click for Alert Message</button>
+            <button id="changeColorBtn" class="btn">Change Background Color</button>
+            <button id="toggleTextBtn" class="btn">Toggle Text Visibility</button>
+            
+            <div id="toggleText" style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border-radius: 8px;">
+                <h3>Hidden/Visible Content</h3>
+                <p>This content can be toggled using JavaScript. Click the button above to see it in action!</p>
+            </div>
+        </section>
+        
+        <section id="resources">
+            <h2>Learning Path</h2>
+            <p>Follow these steps to master web development:</p>
+            <ol>
+                <li>Start with <a href="https://www.w3schools.com/html/default.asp" target="_blank">HTML basics</a></li>
+                <li>Move on to <a href="https://www.w3schools.com/css/default.asp" target="_blank">CSS fundamentals</a></li>
+                <li>Learn <a href="https://www.w3schools.com/js/default.asp" target="_blank">JavaScript principles</a></li>
+                <li>Explore <a href="https://www.w3schools.com/css/css_rwd_intro.asp" target="_blank">responsive design</a></li>
+                <li>Practice with <a href="https://github.com/microsoft/Web-Dev-For-Beginners" target="_blank">real projects</a></li>
+            </ol>
+        </section>
+        
+        <section id="contact">
+            <h2>Contact Information</h2>
+            <p>For more information about web development or internship opportunities, please contact:</p>
+            <p>
+                Email: <a href="mailto:info@apexplanet.com">info@apexplanet.com</a><br>
+                Website: <a href="https://www.apexplanet.com" target="_blank">www.apexplanet.com</a><br>
+                LinkedIn: <a href="https://www.linkedin.com/company/apexplanet-software" target="_blank">ApexPlanet Software</a>
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ApexPlanet Software Pvt Ltd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for Interactivity - Modified for direct execution
+        
+        // Alert message button
+        const alertBtn = document.getElementById('alertBtn');
+        alertBtn.onclick = function() {
+            alert("Hello! This is a JavaScript alert message. You've completed Step 3 of your task!");
+        };
+
+        // Change background color button
+        const changeColorBtn = document.getElementById('changeColorBtn');
+        let colorToggle = false;
+        changeColorBtn.onclick = function() {
+            const body = document.body;
+            if (colorToggle) {
+                body.style.backgroundColor = '#f0f8f4';
+            } else {
+                body.style.backgroundColor = '#e0f2f1';
+            }
+            colorToggle = !colorToggle;
+        };
+
+        // Toggle text visibility button
+        const toggleTextBtn = document.getElementById('toggleTextBtn');
+        const toggleText = document.getElementById('toggleText');
+        toggleTextBtn.onclick = function() {
+            if (toggleText.style.display === 'none') {
+                toggleText.style.display = 'block';
+            } else {
+                toggleText.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
