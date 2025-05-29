@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexPlanet - Task 2</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Container using CSS Grid for overall layout */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto 1fr auto;
+            grid-template-areas:
+                "header"
+                "nav"
+                "main"
+                "footer";
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            grid-area: header;
+            background-color: #1d7373;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Navigation using Flexbox */
+        nav {
+            grid-area: nav;
+            background-color: #2a8989;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #176666;
+        }
+
+        nav a.active {
+            background-color: #176666;
+            font-weight: bold;
+        }
+
+        /* Main Content Area using CSS Grid */
+        main {
+            grid-area: main;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        /* Flexbox for Content Sections */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h2 {
+            color: #1d7373;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1d7373;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #1d7373;
+            box-shadow: 0 0 0 2px rgba(29, 115, 115, 0.2);
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        input.invalid, textarea.invalid, select.invalid {
+            border-color: #e74c3c;
+        }
+
+        button {
+            background-color: #1d7373;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #176666;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Todo List Styles */
+        .todo-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .todo-header {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .todo-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+        }
+
+        .add-button {
+            border-radius: 0 4px 4px 0;
+            padding: 0.75rem 1rem;
+        }
+
+        .todo-list {
+            list-style-type: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 1rem;
+        }
+
+        .todo-text {
+            flex-grow: 1;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Gallery Styles removed */
+
+        /* Confirmation Message */
+        .confirmation {
+            display: none;
+            background-color: #2ecc71;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Footer Styles */
+        footer {
+            grid-area: footer;
+            background-color: #1d7373;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            nav {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            main {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ApexPlanet Software Pvt Ltd</h1>
+            <p>Intermediate HTML, CSS, and JavaScript - Task 2</p>
+        </header>
+        
+        <nav>
+            <a href="#" class="active">Home</a>
+            <a href="#contact">Contact</a>
+            <a href="#todo">To-Do List</a>
+            <a href="#about">About</a>
+        </nav>
+        
+        <main>
+            <div class="content-wrapper">
+                <!-- Contact Form Section -->
+                <section id="contact" class="card">
+                    <h2>Contact Form</h2>
+                    <div id="form-confirmation" class="confirmation">
+                        Thank you for submitting your message! We'll get back to you shortly.
+                    </div>
+                    <form id="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                            <span class="error" id="name-error">Please enter your full name</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error" id="email-error">Please enter a valid email address</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                            <span class="error" id="phone-error">Please enter a valid phone number</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">-- Select a subject --</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <span class="error" id="subject-error">Please select a subject</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <span class="error" id="message-error">Please enter your message</span>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button type="submit">Submit</button>
+                            <button type="reset">Reset</button>
+                        </div>
+                    </form>
+                </section>
+                
+                <!-- To-Do List Section -->
+                <section id="todo" class="card">
+                    <h2>Dynamic To-Do List</h2>
+                    <div class="todo-container">
+                        <div class="todo-header">
+                            <input type="text" id="todo-input" class="todo-input" placeholder="Add a new task...">
+                            <button id="add-todo" class="add-button">Add</button>
+                        </div>
+                        <ul id="todo-list" class="todo-list">
+                            <!-- Todo items will be added here by JavaScript -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 ApexPlanet Software Pvt Ltd. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Form Validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contact-form');
+            const formConfirmation = document.getElementById('form-confirmation');
+            
+            // Validate form on submit
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Reset previous validation states
+                const errorElements = document.querySelectorAll('.error');
+                errorElements.forEach(error => error.style.display = 'none');
+                
+                const inputs = contactForm.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => input.classList.remove('invalid'));
+                
+                let isValid = true;
+                
+                // Validate name (required)
+                const name = document.getElementById('name');
+                if (!name.value.trim()) {
+                    document.getElementById('name-error').style.display = 'block';
+                    name.classList.add('invalid');
+                    isValid = false;
+                }
+                
+                // Validate email (required and format)
+                const email = document.getElementById('email');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email.value.trim() || !emailRegex.test(email.value)) {
+                    document.getElementById('email-error').style.display = 'block';
+                    email.classList.add('invalid');
+                    isValid = false;
+                }
+                
+                // Validate phone (optional but must be valid if provided)
+                const phone = document.getElementById('phone');
+                const phoneRegex = /^\d{10}$/;
+                if (phone.value.trim() && !phoneRegex.test(phone.value.replace(/[- ]/g, ''))) {
+                    document.getElementById('phone-error').style.display = 'block';
+                    phone.classList.add('invalid');
+                    isValid = false;
+                }
+                
+                // Validate subject (required)
+                const subject = document.getElementById('subject');
+                if (!subject.value) {
+                    document.getElementById('subject-error').style.display = 'block';
+                    subject.classList.add('invalid');
+                    isValid = false;
+                }
+                
+                // Validate message (required)
+                const message = document.getElementById('message');
+                if (!message.value.trim()) {
+                    document.getElementById('message-error').style.display = 'block';
+                    message.classList.add('invalid');
+                    isValid = false;
+                }
+                
+                // If form is valid, show confirmation and reset form
+                if (isValid) {
+                    alert('Form submitted successfully!');
+                    formConfirmation.style.display = 'block';
+                    contactForm.reset();
+                    
+                    // Hide confirmation after 5 seconds
+                    setTimeout(() => {
+                        formConfirmation.style.display = 'none';
+                    }, 5000);
+                }
+            });
+            
+            // To-Do List Functionality
+            const todoInput = document.getElementById('todo-input');
+            const addTodoButton = document.getElementById('add-todo');
+            const todoList = document.getElementById('todo-list');
+            
+            // Add a new todo item
+            function addTodoItem() {
+                const todoText = todoInput.value.trim();
+                
+                if (todoText) {
+                    // Create the list item
+                    const li = document.createElement('li');
+                    li.className = 'todo-item';
+                    
+                    // Create the checkbox
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.addEventListener('change', function() {
+                        li.classList.toggle('completed', this.checked);
+                    });
+                    
+                    // Create the todo text
+                    const span = document.createElement('span');
+                    span.className = 'todo-text';
+                    span.textContent = todoText;
+                    
+                    // Create the delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-btn';
+                    deleteButton.textContent = '×';
+                    deleteButton.addEventListener('click', function() {
+                        li.remove();
+                    });
+                    
+                    // Append elements to the list item
+                    li.appendChild(checkbox);
+                    li.appendChild(span);
+                    li.appendChild(deleteButton);
+                    
+                    // Add the new item to the list
+                    todoList.appendChild(li);
+                    
+                    // Clear the input
+                    todoInput.value = '';
+                    todoInput.focus();
+                }
+            }
+            
+            // Event listeners for todo list
+            addTodoButton.addEventListener('click', addTodoItem);
+            
+            todoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTodoItem();
+                }
+            });
+            
+            // Image Gallery Functionality removed as per requirements
+            
+            // Navigation
+            const navLinks = document.querySelectorAll('nav a');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Get the target section id
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    if (targetId) {
+                        // Scroll to the target section
+                        const targetSection = document.getElementById(targetId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
