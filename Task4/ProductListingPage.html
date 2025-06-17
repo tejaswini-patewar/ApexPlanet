@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Listing</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 2rem;
+      background: #fafafa;
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .controls {
+      max-width: 900px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    select, input[type="text"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      width: 180px;
+    }
+    #product-list {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+      gap: 1rem;
+    }
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .product-name {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .product-category,
+    .product-price {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.3rem;
+    }
+    .favorite {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 1.4rem;
+      color: #ccc;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s;
+    }
+    .favorite.active {
+      color: #e74c3c;
+    }
+    /* Modal styles */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+    #modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      text-align: center;
+    }
+    #modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: #999;
+      transition: color 0.3s;
+    }
+    #modal-close:hover {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Product Listing</h1>
+  <div class="controls">
+    <select id="category-filter">
+      <option value="all">All Categories</option>
+      <option value="electronics">Electronics</option>
+      <option value="books">Books</option>
+      <option value="clothing">Clothing</option>
+    </select>
+
+    <select id="sort-select">
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+    </select>
+
+    <input type="text" id="search-input" placeholder="Search products..." />
+  </div>
+
+  <div id="product-list"></div>
+
+  <!-- Modal -->
+  <div id="modal">
+    <div id="modal-content">
+      <span id="modal-close">&times;</span>
+      <h2 id="modal-name"></h2>
+      <p><strong>Category:</strong> <span id="modal-category"></span></p>
+      <p><strong>Price:</strong> $<span id="modal-price"></span></p>
+      <p id="modal-description"></p>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Smartphone', category: 'electronics', price: 699, description: 'Latest model with amazing features.' },
+      { id: 2, name: 'Laptop', category: 'electronics', price: 999, description: 'Powerful and lightweight laptop.' },
+      { id: 3, name: 'Novel - The Alchemist', category: 'books', price: 15, description: 'A popular philosophical book.' },
+      { id: 4, name: 'T-Shirt', category: 'clothing', price: 25, description: 'Comfortable cotton t-shirt.' },
+      { id: 5, name: 'Headphones', category: 'electronics', price: 199, description: 'Noise-cancelling over-ear headphones.' },
+      { id: 6, name: 'Jeans', category: 'clothing', price: 40, description: 'Stylish denim jeans.' },
+      { id: 7, name: 'Science Fiction Book', category: 'books', price: 20, description: 'A thrilling sci-fi adventure.' }
+    ];
+
+    // Load favorites from localStorage or empty array
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    const productListEl = document.getElementById('product-list');
+    const categoryFilter = document.getElementById('category-filter');
+    const sortSelect = document.getElementById('sort-select');
+    const searchInput = document.getElementById('search-input');
+
+    // Modal elements
+    const modal = document.getElementById('modal');
+    const modalName = document.getElementById('modal-name');
+    const modalCategory = document.getElementById('modal-category');
+    const modalPrice = document.getElementById('modal-price');
+    const modalDescription = document.getElementById('modal-description');
+    const modalClose = document.getElementById('modal-close');
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Render product cards
+    function renderProducts() {
+      let filteredProducts = [...products];
+
+      // Filter by category
+      const selectedCategory = categoryFilter.value;
+      if(selectedCategory !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category === selectedCategory);
+      }
+
+      // Search filter (case-insensitive)
+      const searchTerm = searchInput.value.toLowerCase();
+      if(searchTerm) {
+        filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchTerm));
+      }
+
+      // Sort
+      const sortOrder = sortSelect.value;
+      filteredProducts.sort((a, b) => sortOrder === 'asc' ? a.price - b.price : b.price - a.price);
+
+      // Clear current list
+      productListEl.innerHTML = '';
+
+      if(filteredProducts.length === 0) {
+        productListEl.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: #777;">No products found.</p>';
+        return;
+      }
+
+      // Build product cards
+      filteredProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        // Favorite heart icon
+        const favIcon = document.createElement('span');
+        favIcon.className = 'favorite';
+        favIcon.innerHTML = '&#10084;'; // Heart symbol
+        if(favorites.includes(product.id)) favIcon.classList.add('active');
+
+        // Toggle favorite on click (stop event bubbling so modal doesn't open)
+        favIcon.addEventListener('click', e => {
+          e.stopPropagation();
+          if(favorites.includes(product.id)) {
+            favorites = favorites.filter(id => id !== product.id);
+          } else {
+            favorites.push(product.id);
+          }
+          localStorage.setItem('favorites', JSON.stringify(favorites));
+          renderProducts();
+        });
+
+        // Product info elements
+        const nameEl = document.createElement('div');
+        nameEl.className = 'product-name';
+        nameEl.textContent = product.name;
+
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'product-category';
+        categoryEl.textContent = `Category: ${capitalize(product.category)}`;
+
+        const priceEl = document.createElement('div');
+        priceEl.className = 'product-price';
+        priceEl.textContent = `$${product.price}`;
+
+        card.appendChild(favIcon);
+        card.appendChild(nameEl);
+        card.appendChild(categoryEl);
+        card.appendChild(priceEl);
+
+        // Open modal on card click
+        card.addEventListener('click', () => {
+          modalName.textContent = product.name;
+          modalCategory.textContent = capitalize(product.category);
+          modalPrice.textContent = product.price;
+          modalDescription.textContent = product.description;
+          modal.style.display = 'flex';
+        });
+
+        productListEl.appendChild(card);
+      });
+    }
+
+    // Close modal function
+    modalClose.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    // Close modal if clicking outside modal content
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Event listeners for filters and search
+    categoryFilter.addEventListener('change', renderProducts);
+    sortSelect.addEventListener('change', renderProducts);
+    searchInput.addEventListener('input', renderProducts);
+
+    // Initial render
+    renderProducts();
+  </script>
+</body>
+</html>
